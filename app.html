@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Design | Designer Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* =========================================
+     1. Variables & Base Settings
+  ========================================= */
+  :root {
+    --bg-main: #F9F8F6;
+    --accent-beige: #FFF5EE; 
+    --accent-blue: #D6E6F2;
+    --accent-pink: #FAD4D4;
+    --text-main: #4A4A4A; 
+    --text-muted: #838A97;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background-color: var(--bg-main); color: var(--text-main);
+    font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+    line-height: 1.8; overflow-x: hidden; cursor: none;
+  }
+  a, button { cursor: none; text-decoration: none; color: inherit; border: none; background: none; }
+  .eng-font { font-family: 'Quicksand', sans-serif; font-weight: 700; }
+  .eng-font-black { font-family: 'Quicksand', sans-serif; font-weight: 900; }
+
+  /* =========================================
+     2. Custom Cursor & Sparkle
+  ========================================= */
+  #cursor {
+    position: fixed; top: 0; left: 0; width: 24px; height: 24px;
+    background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(146, 220, 229, 1); 
+    border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); 
+    transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, backdrop-filter 0.2s; backdrop-filter: blur(3px);
+  }
+  body.hovering #cursor { 
+    width: 60px; height: 60px; background-color: transparent; border-color: rgba(255, 158, 181, 1); backdrop-filter: blur(0px); 
+  }
+
+  .site-stamp {
+    position: fixed; width: 80px; pointer-events: none; z-index: 99999;
+    transform-origin: center; animation: stampBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  @keyframes stampBounce {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(var(--rot)); opacity: 0; }
+    30% { transform: translate(-50%, -50%) scale(1.15) rotate(var(--rot)); opacity: 1; }
+    60% { transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.5) rotate(var(--rot)); opacity: 0; }
+  }
+
+  /* =========================================
+     3. Navigation (ご指定のコードと完全一致)
+  ========================================= */
+  nav {
+    position: fixed; top: 20px; left: 5%; width: 90%; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 50px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03); z-index: 10000;
+  }
+  .logo { font-size: 1.4rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-main); font-weight: 900;}
+  .nav-links { display: flex; gap: 32px; }
+  .nav-link { font-size: 0.95rem; position: relative; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-main); font-weight: 700;}
+  .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--accent-pink); transition: width 0.3s ease; border-radius: 2px;}
+  .nav-link:hover::after { width: 100%; }
+
+  @media (max-width: 768px) {
+    nav { padding: 12px 20px; top: 10px; width: 94%; left: 3%; }
+    .logo { font-size: 1.1rem; }
+    .nav-links { gap: 10px; }
+    .nav-link { font-size: 0.7rem; letter-spacing: 0.05em; }
+  }
+
+  /* =========================================
+     4. Header Section (アプリデザイン説明)
+  ========================================= */
+  .page-header { padding: 180px 5% 60px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .page-title { font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: 0.05em; margin-bottom: 30px; color: var(--text-main); }
+  .page-desc { font-size: 1.15rem; font-weight: 700; color: var(--text-muted); line-height: 2; margin-bottom: 50px; }
+
+  /* =========================================
+     5. App Design Grid
+  ========================================= */
+  .grid-container { max-width: 1400px; margin: 0 auto; padding: 0 5% 100px; }
+  .ui-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 60px 40px; 
+  }
+
+  @media (max-width: 1024px) { .ui-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .ui-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; } }
+  @media (max-width: 480px) { .ui-grid { grid-template-columns: 1fr; } }
+
+  .ui-card {
+    background: transparent;
+    display: flex; flex-direction: column; align-items: center;
+    transition: transform 0.4s ease; cursor: none;
+    opacity: 0; transform: translateY(30px);
+  }
+  .ui-card.reveal-active { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+  .ui-card:hover { transform: translateY(-10px); }
+
+  /* スマホモックアップ: 画像が完全に埋まる設計 */
+  .device-mockup {
+    width: 100%; max-width: 260px; aspect-ratio: 9 / 19; 
+    background: #fff; border: 10px solid #1a1a1a; border-radius: 36px;
+    position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    margin-bottom: 24px; transition: box-shadow 0.4s ease;
+    display: block; /* 隙間排除 */
+  }
+  .ui-card:hover .device-mockup { box-shadow: 0 25px 50px rgba(0,0,0,0.15); border-color: #000; }
+  
+  /* スマホのノッチ */
+  .device-mockup::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 45%; height: 20px; background: #1a1a1a; border-radius: 0 0 14px 14px; z-index: 10;
+    transition: background 0.4s ease;
+  }
+  .ui-card:hover .device-mockup::before { background: #000; }
+
+  /* 画像フィット (隙間なく完全に埋める) */
+  .screen-img { 
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; object-fit: cover; 
+    background: #f0f0f0; display: block; transition: transform 0.4s ease;
+  }
+  .ui-card:hover .screen-img { transform: scale(1.03); }
+  
+  .placeholder-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #aaa; font-weight: 800; font-size: 0.8rem; text-align: center; width: 100%;}
+
+  .card-info { text-align: center; width: 100%; }
+  .theme-title { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;}
+  .view-detail { font-size: 0.8rem; font-weight: 700; color: var(--accent-pink); letter-spacing: 0.1em; opacity: 0; transition: opacity 0.3s ease; }
+  .ui-card:hover .view-detail { opacity: 1; }
+
+  /* =========================================
+     6. Modal (おしゃれな詳細説明)
+  ========================================= */
+  #modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(249, 248, 246, 0.95); backdrop-filter: blur(15px);
+    z-index: 99990; display: flex; justify-content: center; align-items: center;
+    opacity: 0; visibility: hidden; transition: all 0.4s ease; padding: 20px;
+  }
+  #modal-overlay.active { opacity: 1; visibility: visible; }
+
+  .modal-content {
+    background: #fff; border-radius: 40px; padding: 50px;
+    display: flex; gap: 50px; max-width: 1000px; width: 100%; max-height: 90vh;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,1);
+    transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow-y: auto;
+  }
+  #modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+  .modal-device-wrapper { flex: 0 0 300px; display: flex; justify-content: center; }
+  
+  /* モーダル内のスマホも完全フィット */
+  .modal-device {
+    width: 100%; aspect-ratio: 9 / 19;
+    background: #fff; border: 12px solid #1a1a1a; border-radius: 40px;
+    position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  .modal-device::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 45%; height: 24px; background: #1a1a1a; border-radius: 0 0 16px 16px; z-index: 10;
+  }
+  
+  .modal-info { display: flex; flex-direction: column; justify-content: center; flex: 1; }
+  .m-badge { display: inline-block; padding: 6px 16px; background: var(--accent-pink); color: #fff; border-radius: 20px; font-size: 0.8rem; font-weight: 900; letter-spacing: 0.1em; margin-bottom: 20px; width: fit-content; }
+  .m-title { font-size: 2.2rem; font-weight: 900; color: var(--text-main); margin-bottom: 30px; line-height: 1.3;}
+  .m-desc { font-size: 1.05rem; color: var(--text-muted); font-weight: 700; line-height: 2; white-space: pre-wrap; }
+
+  .modal-close {
+    position: absolute; top: 30px; right: 40px; font-size: 3rem; color: var(--text-main);
+    font-weight: 300; transition: transform 0.2s; cursor: none; z-index: 99991;
+  }
+  .modal-close:hover { transform: rotate(90deg); color: var(--accent-pink); }
+
+  @media (max-width: 800px) {
+    .modal-content { flex-direction: column; align-items: center; padding: 40px 20px; text-align: center; }
+    .modal-device-wrapper { width: 220px; flex: none; }
+    .m-badge { margin: 0 auto 20px; }
+    .modal-close { top: 10px; right: 20px; font-size: 2.5rem; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <nav>
+    <a href="../index.html" class="logo interactive eng-font">Portfolio</a>
+    <div class="nav-links eng-font">
+      <a href="#about" class="nav-link interactive">About</a>
+      <a href="#web" class="nav-link interactive">Web</a>
+      <a href="#app" class="nav-link interactive">App</a>
+      <a href="#logo" class="nav-link interactive">Logo</a>
+      <a href="#motion" class="nav-link interactive">Motion</a>
+      <a href="#dailyui" class="nav-link interactive">Daily UI</a>
+      <a href="#contact" class="nav-link interactive">Contact</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1 class="page-title eng-font-black">App Design</h1>
+    <p class="page-desc">
+      82日間にわたるモバイルアプリUIの探求と実践の記録。<br>
+      直感的な操作性と、視覚的なノイズを削ぎ落としたクリーンなレイアウト。<br>
+      ユーザーの課題解決と心地よさを両立させたコンポーネント設計をまとめています。
+    </p>
+  </header>
+
+  <main class="grid-container">
+    <div class="ui-grid" id="app-grid">
+      </div>
+  </main>
+
+  <div id="modal-overlay" class="interactive-bg">
+    <button class="modal-close interactive" id="modal-close">×</button>
+    <div class="modal-content">
+      <div class="modal-device-wrapper">
+        <div class="modal-device">
+          <img src="" id="modal-img" class="screen-img">
+        </div>
+      </div>
+      <div class="modal-info">
+        <span class="m-badge eng-font-black" id="modal-number">NO. 00</span>
+        <h2 class="m-title eng-font-black" id="modal-title">App Title</h2>
+        <p class="m-desc" id="modal-desc">ここに説明文が入ります。</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================
+    // 1. 手動管理用 82個のアプリデザインデータ
+    // ここで画像パスやタイトル、説明文を一つずつ自由に変更できます。
+    // =========================================
+    const appDataList = [
+      { id: 1, numStr: '01', title: 'Sign Up', img: '../ポートフォリオ/appdesign/app01_signup.jpg', desc: 'サービスの新規会員登録画面。この画面のUIは、淡いピンクを基調としたデザインで統一されており、中央には氏名、メールアドレス、パスワード、および確認用パスワードの入力フォームが分かりやすく縦に並んでいる。パスワードの入力欄には可視・不可視を切り替える目のアイコンが配置されており、その下には利用規約への同意チェックボックスと、会員登録手続きを進めるための「はじめる」ボタンが設置されている。さらに、画面最下部には外部サービスと連携して簡単に登録ができるソーシャルログインボタンも備わっており、ユーザーがスムーズに登録を行える直感的な構成に。' },
+      { id: 2, numStr: '02', title: 'Checkout', img: '../ポートフォリオ/appdesign/app02_credit card checkout.jpg', desc: 'ECサイト等の決済手続きにおけるクレジットカード登録画面。この画面のUIは、上部に決済完了までのプロセスを示すステップバーが配置されており、現在は入力フェーズであることが視覚的に示されている。中央の入力エリアには、対応しているカードブランドのロゴやカードスキャンボタン、番号、名義人、有効期限、セキュリティコード、お支払い区分の入力項目が分かりやすく整理されて並んでいる。また、次回以降の手続きを簡略化するためのカード情報保存スイッチや、画面下部に他の決済方法へ切り替えるためのアコーディオンメニューが配置されているため、ユーザーが迷わずスムーズに手続きを進められる直感的なデザイン構成に。' },
+
+      { id: 3, numStr: '03', title: 'Calculator', img: '../ポートフォリオ/appdesign/app04_calculator.jpg', desc: 'スマートフォンの電卓アプリの画面。この画面のUIは、上部の表示エリアに現在の計算式とその計算結果が大きく右寄せで表示されており、左上にはメニューボタン、右上には計算履歴を確認するためのアイコンが配置されている。また、画面下部には白を基調とした数字キーやクリアボタンが整然と並び、右側には四則演算やイコールなどの機能ボタンが淡いブルーで色分けされて配置されているため、全体としてシンプルで余白を活かした直感的に操作しやすいデザイン構成に。' },
+
+      { id: 4, numStr: '04', title: 'Profile', img: '../ポートフォリオ/appdesign/app06_profile.jpg', desc: 'SNS等のプロフィール画面。この画面のUIは、上部のヘッダーエリアにユーザーのアイコン、名前、ID、自己紹介文が集約されており、投稿数やフォロー・フォロワー数といったステータスと併せて「プロフィール編集」ボタンが直感的に配置されている。また、画面中段には投稿写真、動画、お気に入りコンテンツを効率的に切り替えるためのタブが設置されており、その下に配置されたグリッド状の投稿一覧は並び替え機能によって最新順などで整理できる仕組みである。さらに、画面最下部にはホームや検索、投稿などの主要機能へ瞬時に遷移できるナビゲーションバーが備わっており、アプリ全体の回遊性を高める構成に。' },
+      { id: 5, numStr: '05', title: 'Settings', img: '../ポートフォリオ/appdesign/app07_settings.jpg', desc: 'アプリ内の各種項目を一元管理するための設定画面。上部に設置された検索バーにより、ユーザーは目的の設定へ即座にアクセス可能である。通知設定エリアは展開可能な形式で整理されており、通知のオン・オフを個別に細かく調整できる設計となっている。また、アカウント管理やプライバシー、表示テーマ、言語設定などの主要項目がリスト形式で直感的に配置されており、画面最下部のナビゲーションバーと併せてアプリ全体の操作性が高められた構成。' },
+
+      { id: 6, numStr: '06', title: 'Music Player', img: '../ポートフォリオ/appdesign/app09_music player.jpg', desc: '音楽再生アプリのメインプレイヤー画面。画面中央には再生中の楽曲のアートワークが円形に配置され、その周囲をプログレスバーが囲むことで、曲の進行状況を直感的に視認できる構成となっている。また、楽曲タイトルやアーティスト名の下には、ダウンロード、シェア、音量調整、プレイリスト追加、お気に入り登録といった主要な機能アイコンが集約されており、効率的な操作が可能である。画面下部には再生・停止、曲送り・戻し、シャッフル、リピートといった再生制御ボタンが配置され、最下段には「次のコンテンツ」や「関連のコンテンツ」へアクセスするタブが用意されているため、音楽体験を途切れさせることなくスムーズに次の楽曲や関連楽曲へと誘導する洗練されたUI設計に。' },
+      { id: 7, numStr: '07', title: 'Social Share', img: '../ポートフォリオ/appdesign/app10_social share.jpg', desc: '現在聴いている楽曲をSNSやその他のプラットフォームで共有するためのシェア機能インターフェース。画面中央には再生中の楽曲のアートワークやタイトル、アーティスト名が表示されており、その下にはLINE、X（旧Twitter）、Instagramなどの主要なSNSアイコンが並んでいる。ユーザーはこれらを選択することで、聴いている曲の情報をフォロワーと簡単に共有できるほか、下段のコピーや検索機能を通じて外部アプリへ情報を渡すことも可能な、汎用性の高い共有メニューとなっている。' },
+      { id: 8, numStr: '08', title: 'Flash Message', img: '../ポートフォリオ/appdesign/app11_flash message.jpg', desc: 'ECサイトにおける注文完了後のフラッシュメッセージ画面。画面上部にはカートから完了までの注文プロセスを示すステップバーが配置されており、ユーザーは現在の状況を容易に把握できる。中央には「Thank you!」というメッセージと共に、親しみやすい猫のイラストと完了を示すチェックマークが表示され、視覚的に安心感を与える構成となっている。また、注文内容の確認方法や発送連絡に関する案内が記載されているほか、注文キャンセルや交換・返品に関するリンクが整備されており、購入後の不安を解消する設計に。' },
+      { id: 9, numStr: '09', title: 'E-Commerce', img: '../ポートフォリオ/appdesign/app12_e-commerce.jpg', desc: 'ECサイトにおける商品詳細ページのUI。画面上部には商品のメイン画像が表示され、スワイプ操作や左右の矢印ボタンで複数枚の画像を閲覧できる仕組みとなっている。画像右下には商品詳細アイコンやシェアボタンが配置されており、商品名、お気に入り登録数、価格、クーポン適用状況といった基本情報が簡潔にまとめられている。また、色やサイズの選択肢が直感的なアイコンやボタンで提示されており、現在選択中のXSサイズの詳細スペック（身幅や肩幅など）も確認できる。' },
+      { id: 10, numStr: '10', title: 'Direct Message', img: '../ポートフォリオ/appdesign/app13_direct message.jpg', desc: '相手とのやり取りを表示するメッセージアプリのUIである。画面上部には通話およびビデオ通話ボタンが配置されており、チャット内容が時系列で吹き出し形式で表示されることで、直感的に対話の流れを把握できる構成となっている。下部には画像添付や音声入力が可能な入力バーがあり、スムーズなコミュニケーションを促す親しみやすい設計。' },
+      { id: 11, numStr: '11', title: 'Countdown Timer', img: '../ポートフォリオ/appdesign/app14_countdown timer.jpg', desc: '学習や作業に集中するためのカウントダウンタイマーアプリのインターフェース。画面上部には試験日までの残り日数が表示されており、ユーザーのモチベーションを維持する工夫に。中央には現在のカウントダウン時間を示す大きな円形タイマーと、時間調整や一時停止が可能な操作ボタンが配置されており、直感的な操作が可能である。下部には、タイマー、テーマ、スケジュール、履歴・統計、その他のメニューへアクセスするためのナビゲーションバーが備わっており、タイマー機能だけでなく学習の進捗管理も包括的に行える実用的な構成に。' },
+      { id: 12, numStr: '12', title: 'On/Off Switch', img: '../ポートフォリオ/appdesign/app15_on off switch.jpg', desc: '照明のON/OFFを直感的に切り替えるアプリのインターフェースである。消灯時の「LIGHTS OUT」画面はブルーグレーを基調として落ち着いた雰囲気で構成されており、点灯時の「LIGHTS ON」画面はオレンジ色を基調とした暖かみのある色調に切り替わることで、視覚的に現在の状態を明確に伝えている。トグルスイッチを操作するという簡潔なUI設計によって、ユーザーは迷うことなく目的の操作を行える構成。' },
+      { id: 13, numStr: '13', title: 'Pop-Up / Overlay', img: '../ポートフォリオ/appdesign/app16_pop-up overlay.jpg', desc: '運動アプリにおけるミッション達成を通知するポップアップオーバーレイ。画面中央には「ミッションクリア！」という大きな見出しと共に、成功を祝うキャラクターとバッジのイラストが表示されており、達成内容が明確に伝わる構成である。下部には「共有する」と「バッチを確認」という2つのボタンが配置されており、ユーザーが達成の喜びをSNS等で共有したり、自身の獲得した実績を確認したりするアクションを即座に促す設計。' },
+      { id: 14, numStr: '14', title: 'Purchace Receipt', img: '../ポートフォリオ/appdesign/app17_purchace receipt.jpg', desc: 'ECサイトにおける注文完了後の購入明細およびステータス確認ページ。ページ上部には注文確定のメッセージと準備中である旨が明記されており、その下に注文番号や注文日時、商品ごとの内訳、数量、価格が整理されて表示されている。合計金額や支払い方法、配送先の住所、配送予定日といった取引に必要な情報が網羅されており、ユーザーは最後に「領収書をダウンロード」や「配送状況を確認する」ボタンを通じて、購入後の手続きをスムーズに行える設計。' },
+      { id: 15, numStr: '15', title: 'Analytics Chart', img: '../ポートフォリオ/appdesign/app18_analytics chart.jpg', desc: 'ユーザーの運動実績を詳細に可視化し、日々のモチベーション管理を行うためのプログレス画面。画面上部では「1週間」から「全て」まで期間を切り替えることで、自身の進捗を柔軟に確認できる。中段には運動時間、消費カロリー、継続期間、歩数が数値で示され、ドーナツグラフによって目標に対する現在の達成率が一目で分かる設計となっている。さらに、運動消費カロリーの推移が折れ線グラフで詳細に表示されており、日々の努力を視覚的に追うことが可能。' },
+      { id: 16, numStr: '16', title: 'Leaderboard', img: '../ポートフォリオ/appdesign/app19_leaderboard.jpg', desc: 'ユーザーの運動実績を他のユーザーと比較できるランキング機能のUI。上部には「1週間」から「全て」までの集計期間を切り替えるタブが配置されており、その下にトップ3のユーザーが視覚的に強調して表示されている。中段にはユーザー自身の順位や消費カロリー、運動時間の詳細が先週との比較データとともに記載されており、自身のパフォーマンスを即座に把握できる設計となっている。下段のランキングリストでは、各順位のユーザー情報とあわせて一言メッセージも表示されており、コミュニティ内でのモチベーション向上を促す親しみやすい構成に。' },
+      { id: 17, numStr: '17', title: 'Location Tracker', img: '../ポートフォリオ/appdesign/app20_location tracker.jpg', desc: '目的地までの情報とアクションを整理し、地図上の現在地情報と直感的に連動するよう構成。画面上部には汎用的な検索バーが配置されており、その下に現在地が明示されているため、ユーザーは常に自分の位置関係を把握できる。地図上のルート表示に加えて、左下には「あと10分で到着予定です」という状況がオーバーレイ表示されるため、進行状況を即座に確認可能である。また、画面下半分のパネルには目的地画像、住所、営業時間、電話番号といった施設情報が集約されており、その中の「ナビ開始」と「詳細」ボタンは、目的地へ向かうユーザーの行動をスムーズに誘導する役割を担っている。' },
+      { id: 18, numStr: '18', title: 'Home Monitoring', img: '../ポートフォリオ/appdesign/app21_home monitoring.jpg', desc: '家庭内の家電や設備を一括管理するスマートホーム制御アプリ画面。画面上部には現在の日時、室温、天気が表示され、室内環境を瞬時に把握できるほか、節電スコアで省エネ状況が可視化されている。各エリア（リビング、寝室、玄関など）の照明やエアコンなどの状態がカード形式で配置され、スイッチ操作で直感的なオン・オフが可能である。さらに下部のナビゲーションバーからエネルギー管理や履歴、設定へ素早く切り替えられるようになっており、家庭全体の管理を一つの画面で完結できる構成。' },
+      { id: 19, numStr: '19', title: 'Search', img: '../ポートフォリオ/appdesign/app22_search.jpg', desc: 'ECサイトにおけるファッションアイテムの詳細な検索・絞り込み画面。上部ではMEN/WOMEN/KIDSのターゲット選択やカテゴリ検索が可能であり、下部にはサイズ、カラー、価格帯、発売日といった詳細なフィルター条件を設定するためのインターフェースが配置されている。ユーザーはこれらの条件を細かく指定することで、膨大な商品の中から好みのアイテムを効率的に見つけ出すことができるほか、ブランド名での直接検索も可能。' },
+
+
+      { id: 20, numStr: '20', title: 'Subscribe', img: '../ポートフォリオ/appdesign/app26_subscribe.jpg', desc: '睡眠改善アプリ「Calmind」の有料サブスクリプションプランを選択するための画面。画面には「Plus」と「Premium」の2つのプランがカード形式で提示されており、それぞれの料金や提供される機能が詳細に比較されているため、ユーザーは自身のライフスタイルやニーズに合わせて最適なプランを検討することができる。また、画面下部には「1ヶ月無料、それ以降¥480 / 月」という価格設定が明記されており、その直下に配置された「無料トライアル開始」ボタンから、迷うことなくスムーズに登録手続きへと進める設計。' },
+      { id: 21, numStr: '21', title: 'Dropdown', img: '../ポートフォリオ/appdesign/app27_dropdown.jpg', desc: 'ユーザーが投稿一覧などのコンテンツを特定の条件で並び替えるためのドロップダウンメニュー。現在選択されている「古い順」をはじめ、「新しい順」や「いいね」の数、さらに「閲覧数」に基づいた昇順・降順など、複数の選択肢がリスト形式で整理されている。ユーザーはこれらの項目を直感的に選ぶことで、自身のコンテンツを好みの順序に並べ替え、効率よく閲覧や管理を行うことができるように。' },
+      { id: 22, numStr: '22', title: 'Contact Us', img: '../ポートフォリオ/appdesign/app28_contact us.jpg', desc: 'ユーザーからの問い合わせを受け付けるための入力フォーム。問い合わせ項目、氏名、フリガナ、メールアドレス、詳細内容といった必要事項を入力する欄が順序立てて配置されており、各項目には「必須」のラベルが明記されているため、情報の不備を防ぎつつスムーズな入力ができるようになっている。また、ページ下部にはInstagramやLINE、XなどのSNSでページを共有できる機能が設けられており、最後に問い合わせ内容を送信するためのボタンが配置された、機能的かつ整理された設計。' },
+      { id: 23, numStr: '23', title: 'Map', img: '../ポートフォリオ/appdesign/app29_map.jpg', desc: '現在地から目的地までの経路を案内するナビゲーションアプリのインターフェース。地図上に現在地と目的地をピンで示し、そこを結ぶルートが線で強調されているため、進行方向や位置関係が一目で把握できる。また、目的地までの所要時間や徒歩での距離、到着予定時刻といった移動に必要な情報がカード形式で上部に提示されており、ユーザーは迷うことなく目的地へ向かうことができる。下部にはナビゲーションや検索、設定などの機能へ素早くアクセスするためのナビゲーションバーが配置されており、操作性を重視。' },
+
+      { id: 24, numStr: '24', title: 'Crowdfunding', img: '../ポートフォリオ/appdesign/app32_crowdfunding.jpg', desc: 'クラウドファンディングのプロジェクト紹介と支援受付を目的としたページ。プロジェクトのコンセプトを伝えるメイン画像や詳細な説明が上部に配置され、現在の支援金額、目標達成率、残り日数などの重要指標が視覚的にまとめられているため、プロジェクトの進捗を即座に把握することが可能である。起案者情報やプロジェクトの詳細も読みやすいレイアウトで構成されており、画面下部に配置されたボタンから直感的に支援手続きへと進めるように。' },
+      { id: 25, numStr: '25', title: 'Customize Product', img: '../ポートフォリオ/appdesign/app33_crowdfunding.jpg', desc: 'クッキーの詰め合わせセットを自分好みにカスタマイズするための注文画面。画面上部には完成イメージが表示されており、その下にチョコチップクッキーやチョコクッキーなど、個別のクッキーを選択して数量を調整するためのインターフェースが配置されている。各クッキーには単価が明記されており、プラス・マイナスボタンで数量を変更するたびに合計金額がリアルタイムで更新されるため、ユーザーは予算や好みに合わせてスムーズに調整を行える設計。' },
+
+      { id: 26, numStr: '26', title: 'Blog Post', img: '../ポートフォリオ/appdesign/app35_blog post.jpg', desc: 'ブログの新規投稿を作成するための編集画面。テキストの入力エリアや画像挿入機能、ハッシュタグの追加、公開設定の切り替え機能などがまとめられており、直感的に記事を執筆して投稿できる。' },
+
+      { id: 27, numStr: '27', title: 'Weather', img: '../ポートフォリオ/appdesign/app37_weather.jpg', desc: '現在の天気や気温、週間予報を確認するための天気予報画面。上部には現在地の名称や現在の気温、最高・最低気温、天候状況が大きく表示されており、その下に時間ごとの天気の推移がタイムライン形式で記載されている。下部には曜日ごとの週間予報がまとめられており、それぞれの最低・最高気温が並列で示されているため、一週間先までの天候変化を一目で効率よく把握できる設計。' },
+      { id: 28, numStr: '28', title: 'Calendar', img: '../ポートフォリオ/appdesign/app38_calendar.jpg', desc: '日々のスケジュールやタスクを管理するためのカレンダー画面。上部には月ごとのカレンダーが表示されており、選択した日付の予定が下部にタイムライン形式で詳細にリストアップされている。各予定は時間帯や内容、場所が明示されており、日々のタスクやイベントを時系列で直感的に把握できる。' },
+      { id: 29, numStr: '29', title: 'Testimonials', img: '../ポートフォリオ/appdesign/app39_testimonials.jpg', desc: '商品に対する購入者のレビューを掲載する詳細画面。上部には商品の画像と名称が表示されており、その下に総合評価とレビュー件数が配置されている。メインコンテンツである「お客様の声」には、投稿者のアイコンや評価、具体的な感想が記載されており、さらに購入したサイズやカラー、投稿者の属性情報（性別・身長・体重）も併せて表示することで、他のユーザーが購入を検討する際の参考情報を詳細に提供。' },
+      { id: 30, numStr: '30', title: 'Food Order', img: '../ポートフォリオ/appdesign/app40_food order.jpg', desc: 'ユーザーがスムーズに好みのラーメンを見つけられるFood Orderアプリのメイン画面。検索・カテゴリ絞り込み機能に加え、トレンド情報やリピート注文機能を配置し、注文完了までのプロセスを最適化。' },
+      { id: 31, numStr: '31', title: 'Workout Tracker', img: '../ポートフォリオ/appdesign/app41_workout tracker.jpg', desc: 'フィットネスアプリの「トレーニング実行中」画面。選択したトレーニングメニューの進捗状況を確認しながら、次のステップや音声でのコミュニケーション操作を行うための実行インターフェース。' },
+      { id: 32, numStr: '32', title: 'ToDo List', img: '../ポートフォリオ/appdesign/app42_todo list.jpg', desc: '日ごとのタスクを時間軸で管理する「スケジュール・タスク管理」画面。日付ごとのタスクを時系列に沿って一覧表示し、各タスクの詳細（内容、期限、場所、参加者、使用ツールなど）を把握・管理するためのインターフェース' },
+      { id: 33, numStr: '33', title: 'Food Menu', img: '../ポートフォリオ/appdesign/app43_food menu.jpg', desc: 'カフェのメニューを閲覧するための画面。上部には「すべて」「フード」「ドリンク」「スイーツ」というタブが配置されており、カテゴリごとにメニューを効率よく絞り込める構成となっている。各メニューは、料理や飲み物の画像とともに名前と税込価格がカード形式で表示されており、ユーザーが直感的に内容を把握して選べる設計。' },
+      { id: 34, numStr: '34', title: 'Favorites', img: '../ポートフォリオ/appdesign/app44_favorites.jpg', desc: 'ユーザーが保存したお気に入りアイテムを一覧で確認し、管理するための画面。上部には検索バーや「アイテム」「ブランド」「コーデ」といった切り替えタブが配置されており、目的の情報を素早く見つけられるようになっている。各アイテムは画像、ブランド名、商品名、価格とともにカード形式で表示され、それぞれに「カートに入れる」ボタンが用意されているため、気になった商品をスムーズに購入手続きへ進められる設計。' },
+      { id: 35, numStr: '35', title: 'Info Card', img: '../ポートフォリオ/appdesign/app45_info card.jpg', desc: '店舗情報を一覧で確認できる検索結果画面。店舗の画像や住所、営業時間、アクセス方法といった基本情報をカード形式で表示。評価や詳細ボタンを配置することで、ユーザーが店舗を比較検討しやすくする設計。' },
+      { id: 36, numStr: '36', title: 'Invoice', img: '../ポートフォリオ/appdesign/app46_invoice.jpg', desc: 'ビジネス取引における請求書の確認および支払いを行うための画面である。画面上部には発行日や請求番号、宛先、発行元、そして合計金額が明確に記載されている。中央部には品目ごとの詳細な内訳と数量、単価、金額が表形式で整然と並んでおり、小計や消費税、最終的な合計金額が一目で確認できる。下部には「PDFをダウンロード」と「支払う」という2つのアクションボタンが配置されており、ユーザーが請求内容を保存したり、速やかに決済手続きへ移行したりできるよう、非常に機能的なレイアウトに。' },
+      { id: 37, numStr: '37', title: 'Activity Feed', img: '../ポートフォリオ/appdesign/app47_activity feed.jpg', desc: 'SNSにおけるユーザーの活動履歴や反応を時系列で確認するための通知画面。上部には「すべて」や「いいね」「コメント」「フォロー」「メンション」といったタブが配置されており、反応の種類ごとに通知を効率よく分類して確認できる構成となっている。各通知項目には、相手のアイコンや名前、具体的なアクション内容に加えて、対象となった自身の投稿のプレビュー画像がセットで表示されている。これにより、誰がどの投稿に対してどのような反応を示したのかを一目で直感的に把握できる設計。' },
+
+      { id: 38, numStr: '38', title: 'Notifications', img: '../ポートフォリオ/appdesign/app49_notifications.jpg', desc: '注文の発送状況やセール情報、カートの未完了商品、新作入荷などの重要なお知らせを確認するための通知一覧画面。上部の検索バーで過去の通知を絞り込むことが可能である。各通知カードには日付や概要がまとめられており、配送状況の確認など、次のアクションへスムーズに繋げられる設計。' },
+
+      { id: 39, numStr: '39', title: 'Press Page', img: '../ポートフォリオ/appdesign/app51_press page.jpg', desc: '企業の最新ニュースやメディア掲載情報をまとめる「Press & News」ページ。各ニュースは画像、タイトル、日付、概要を含めたカード形式で時系列に表示され、矢印ボタンから詳細へアクセスできる構成となっている。下部にはページネーションとSNSへのリンクを配置し、情報の閲覧性と回遊性を高めた設計。' },
+
+      { id: 40, numStr: '40', title: 'Confirmation', img: '../ポートフォリオ/appdesign/app54_confirmation.jpg', desc: '注文内容を最終確認するための決済画面。購入予定の商品リストに加え、支払い方法や配送先などの情報を一箇所に集約し、各項目を個別に変更できるようにした。また、割引やクーポンが適用された最終金額を明示することで、決済前のユーザーの不安を解消し、そのままスムーズに注文完了へ進める設計。' },
+
+      { id: 41, numStr: '41', title: 'Shopping Cart', img: '../ポートフォリオ/appdesign/app58_shopping cart.png', desc: '購入ステップへの導線が明確なカート画面。' },
+
+      { id: 42, numStr: '42', title: 'Redeem Coupon', img: '../ポートフォリオ/appdesign/app61_redeem coupon.png', desc: '適用された割引内容と、最終的な支払い金額を確認する注文手続きの最終段階。商品ごとのクーポン適用状況と割引合計額を明確にし、支払い方法を選択して注文を確定させるための構成に。' },
+      { id: 43, numStr: '43', title: 'Sign Up Form', img: '../ポートフォリオ/appdesign/app62_sign up form.png', desc: '新規ユーザーがアカウントを作成するための登録画面。利用規約への同意を確認し、新規登録とログインを選択することで、アプリ利用をスムーズに開始するための導入部分。' },
+      { id: 44, numStr: '44', title: 'Best Of', img: '../ポートフォリオ/appdesign/app63_best of.png', desc: '人気商品や注目アイテムを順位付けして紹介する「ランキング」画面。今週のTOP3やカテゴリーごとに売れ筋商品を確認でき、レビュー評価や価格を参考にしながら、ユーザーがトレンドアイテムを見つけるための構成に。' },
+      { id: 45, numStr: '45', title: 'Select User', img: '../ポートフォリオ/appdesign/app64_select user.png', desc: 'その日のユーザーの気分や学習状況を汲み取り、最適な学習スタイルを提案する画面。モチベーションの揺らぎを「モード選択」という形でシステム側に委ねることで、学習の心理的ハードルを下げ、習慣化を促進する設計に。' },
+      { id: 46, numStr: '46', title: 'Notes Widget', img: '../ポートフォリオ/appdesign/app65_notes widget.png', desc: '日々のメモやタスクを管理するためのノート画面。上部にはカテゴリー別のアイコンと新規作成ボタンを配置し、視覚的な整理を容易にした。下部には時系列のカード形式で各メモを表示しており、内容の確認と追記が直感的に行える設計。' },
+      { id: 47, numStr: '47', title: 'Statistics', img: '../ポートフォリオ/appdesign/app66_statistics.png', desc: '日々の活動記録を可視化し、進捗を振り返るための統計画面である。期間別の棒グラフとアクティビティ別の円グラフを組み合わせ、活動量や傾向を一目で把握できるようにした。下部には平均値や比較データをまとめて数値を表示し、積み重ねた実績を具体的に示すことで、ユーザーの振り返りと継続をサポートする設計。' },
+      { id: 48, numStr: '48', title: 'Hotel Booking', img: '../ポートフォリオ/appdesign/app67_hotel booking.png', desc: '宿泊施設を検索・予約するための画面。上部にはエリアや日程などの条件を指定できる検索バーとフィルター機能を備え、目的の施設を効率よく絞り込めるようにした。表示された各施設カードでは、画像とともに料金、立地、評価を一目で確認でき、そのままスムーズに予約手続きへと進める設計。' },
+      { id: 49, numStr: '49', title: 'Flight Search', img: '../ポートフォリオ/appdesign/app68_flight search.png', desc: '航空券を検索・予約するための画面。出発地、目的地、日程、人数、クラスなどの検索条件を詳細に指定できる機能を中央に配置し、希望する旅程を効率よく絞り込めるようにした。下部には条件にマッチする「おすすめのフライト」を一覧で表示しており、便名や時間、価格を比較しながらスムーズに次の予約ステップへ進める設計。' },
+      { id: 50, numStr: '50', title: 'Trending', img: '../ポートフォリオ/appdesign/app69_trending.png', desc: '性別や集計期間ごとに、人気のファッションアイテムを確認できるランキング画面。男女の切り替えタブや「トレンド」「デイリー」「ウィークリー」といった絞り込み条件を備え、好みのスタイルを効率よく探せるようにした。各アイテムは画像と価格、ブランド名がカード形式で整然と表示されており、ユーザーが直感的に流行を把握し、気に入った商品をスムーズにお気に入り登録できる設計。' },
+      { id: 51, numStr: '51', title: 'Event Listing', img: '../ポートフォリオ/appdesign/app70_event listing.png', desc: '期間限定のイベント情報を検索・閲覧するための画面。上部にはキーワード検索や期間別の絞り込みタブを配置し、興味のあるイベントを素早く見つけられるようにした。各イベントは、概要、開催期間、場所、参加費用などの詳細情報が整理されたカード形式で表示されており、詳細ボタンから詳しい内容を確認できる設計。' },
+      { id: 52, numStr: '52', title: 'Schedule', img: '../ポートフォリオ/appdesign/app71_scheduling.png', desc: '日々の予定を時系列で管理するスケジューラー画面。時間軸に沿ったタイムライン形式を採用し、各タスクをカードとして配置することで、一日の活動内容を直感的に把握できるようにした。また、タスクごとに「健康」「食事」「勉強」といったカテゴリーのタグを表示し、予定の性質をひと目で判別できる工夫を凝らしている。下部のタブ切り替えにより、時間帯ごとの詳細な予定確認にも素早くアクセスできる設計。' },
+      { id: 53, numStr: '53', title: 'Image Slider', img: '../ポートフォリオ/appdesign/app72_slider.png', desc: '画像編集におけるフィルター効果をプレビューし、調整するための画面。写真の「編集前（Before）」と「編集後（After）」をスライダーで左右に比較表示することで、フィルターの適用具合を直感的に確認できる。また、下部にはフィルターの強度を調整するスライダーや、カテゴリー別に分類されたエフェクト選択メニューを配置しており、ユーザーが好みのトーンを即座に適用して調整できる設計。' },
+      { id: 54, numStr: '54', title: 'Virtual Reality', img: '../ポートフォリオ/appdesign/app73_virtual reality.png', desc: 'カメラ越しに対象物（植物）を認識し、その詳細情報をARで提示する画面。中央の円形ガイドを合わせることで、「ストレリチア」の育て方や特徴といった情報をリアルタイムに重ねて表示しており、現実空間の情報とデジタルな補足説明をシームレスに結びつける役割を担っている。' },
+   
+      { id: 55, numStr: '55', title: 'Pre-Order', img: '../ポートフォリオ/appdesign/app75_pre-order.png', desc: '商品の詳細を確認し、先行予約を行うための商品紹介画面。画像ギャラリーやサイズ展開、価格を表示し、商品の特徴や魅力を伝える説明文を掲載している。「この商品は予約商品です」という注意書きとともに、予約専用のボタンを配置することで、ユーザーが迷わず予約手続きへ進める設計。' },
+
+      { id: 56, numStr: '56', title: 'Thank You', img: '../ポートフォリオ/appdesign/app77_thank you.png', desc: '注文完了後のサンクスページ。お受け取り番号やお渡し予定時刻を明示することで、ユーザーに対して手続きの完了を確実に伝え、次のステップへの安心感を与えている。また、注文内容の確認ボタンやホームへの戻るボタンを配置し、ユーザーが迷わず次の行動へ移れるよう配慮した設計。' },
+      { id: 57, numStr: '57', title: 'Pending', img: '../ポートフォリオ/appdesign/app78_invitation.png', desc: '友だちを招待し、音楽やプレイリストを共有するための機能画面。独自の招待コードを表示し、そのコードが24時間限定である旨を明示することで、ユーザーに対して迅速な共有を促している。下部にはコードを送信するためのボタンを配置し、SNSやメッセージツール経由で友だちへスムーズに招待を送れる設計。' },
+      { id: 58, numStr: '58', title: 'Itinerary', img: '../ポートフォリオ/appdesign/app79_itinerary.png', desc: '旅行の計画を時系列で管理する旅程画面。日付ごとに目的地やアクティビティをタイムライン形式で表示し、観光スポットや食事の予定を効率よく把握できるようにした。各項目には滞在時間の目安や詳細が記載されており、旅のスケジュールを直感的に確認・編集できる設計。' },
+
+      { id: 59, numStr: '59', title: 'Form Design', img: '../ポートフォリオ/appdesign/app82_form.png', desc: 'お気に入りの対象（推し）を登録するための入力フォームる。名前やグループ名、イメージカラー、活動ジャンル、ファンになったきっかけを項目として設け、ユーザーが推しに関する情報を体系的に管理できるようにした。特に推しカラーは選択式、ジャンルはチップ形式を採用し、入力を楽しみながら素早く済ませられる設計。' }
+    ];
+
+    // =========================================
+    // 2. レンダー関数 (カードの生成)
+    // =========================================
+    const grid = document.getElementById('app-grid');
+
+    function renderGrid(dataArray) {
+      grid.innerHTML = ''; 
+      dataArray.forEach((item, index) => {
+        const card = document.createElement('div'); 
+        card.className = 'ui-card interactive';
+        card.style.transitionDelay = `${(index % 4) * 0.1}s`; 
+        
+        // ★画像が隙間なく完全に埋まる設定★
+        card.innerHTML = `
+          <div class="device-mockup">
+            <img src="${item.img}" class="screen-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="placeholder-text eng-font" style="display: none;">Image<br>Not Found</div>
+          </div>
+          <div class="card-info">
+            <h3 class="theme-title eng-font-black">${item.title}</h3>
+            <span class="view-detail">VIEW DETAIL ✦</span>
+          </div>
+        `;
+
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal(item);
+        });
+
+        grid.appendChild(card);
+      });
+      setTimeout(checkReveal, 50);
+    }
+
+    renderGrid(appDataList);
+
+    // =========================================
+    // 3. モーダル制御ロジック
+    // =========================================
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalClose = document.getElementById('modal-close');
+    const modalImg = document.getElementById('modal-img');
+    const modalNumber = document.getElementById('modal-number');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+
+    function openModal(item) {
+      modalImg.src = item.img;
+      modalNumber.innerText = `NO. ${item.numStr}`;
+      modalTitle.innerText = item.title;
+      modalDesc.innerText = item.desc;
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = ''; 
+      setTimeout(() => { modalImg.src = ""; }, 400); 
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if(e.target === modalOverlay) closeModal();
+    });
+
+    // =========================================
+    // 4. スクロール時のフェードイン判定
+    // =========================================
+    function checkReveal() {
+      const triggerBottom = window.innerHeight * 0.9;
+      document.querySelectorAll('.ui-card').forEach(card => {
+        const cardTop = card.getBoundingClientRect().top;
+        if (cardTop < triggerBottom) {
+          card.classList.add('reveal-active');
+        }
+      });
+    }
+    window.addEventListener('scroll', checkReveal);
+
+    // =========================================
+    // 5. カスタムカーソル＆スタンプ挙動
+    // =========================================
+    const cursor = document.getElementById('cursor');
+    let mX = 0, mY = 0, cX = 0, cY = 0;
+    document.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; });
+    (function anim() {
+      cX += (mX - cX) * 0.4; cY += (mY - cY) * 0.4;
+      cursor.style.transform = `translate(${cX}px, ${cY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(anim);
+    })();
+
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest('.interactive') || e.target.closest('a') || e.target.closest('button')) {
+        document.body.classList.add('hovering');
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest('.interactive') || e.target.closest('a') || e.target.closest('button')) {
+        document.body.classList.remove('hovering');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.ui-card')) return;
+      const stamp = document.createElement('div');
+      stamp.className = 'site-stamp';
+      stamp.style.left = `${e.clientX}px`; stamp.style.top = `${e.clientY}px`;
+      stamp.style.setProperty('--rot', `${Math.random() * 40 - 20}deg`);
+      stamp.innerHTML = '✦'; 
+      stamp.style.color = '#ff9eb5';
+      stamp.style.fontSize = '40px';
+      document.body.appendChild(stamp);
+      setTimeout(() => stamp.remove(), 800);
+    });
+  </script>
+</body>
+</html>
