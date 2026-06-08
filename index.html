@@ -59,6 +59,11 @@
     background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(146, 220, 229, 1); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, backdrop-filter 0.2s; backdrop-filter: blur(3px);
   }
   body.hovering #cursor { width: 60px; height: 60px; background-color: transparent; border-color: rgba(255, 158, 181, 1); backdrop-filter: blur(0px); }
+  /* タブレット・スマホではカスタムカーソル（丸）を消して通常カーソルに戻す */
+  @media (max-width: 1024px) {
+    #cursor { display: none !important; }
+    body, a, button, .interactive { cursor: auto !important; }
+  }
   #progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--text-main); width: 0%; z-index: 10000; border-radius: 0 4px 4px 0; }
 
   /* =========================================
