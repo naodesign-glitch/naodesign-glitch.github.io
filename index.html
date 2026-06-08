@@ -73,7 +73,33 @@
   .nav-link { font-size: 0.95rem; position: relative; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-main); }
   .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--accent-pink); transition: width 0.3s ease; border-radius: 2px;}
   .nav-link:hover::after { width: 100%; }
-  @media (max-width: 768px) { nav { padding: 12px 20px; top: 10px; width: 94%; left: 3%; } .logo { font-size: 1.1rem; } .nav-links { gap: 10px; } .nav-link { font-size: 0.7rem; letter-spacing: 0.05em; } }
+  @media (max-width: 768px) { nav { padding: 12px 20px; top: 10px; width: 94%; left: 3%; } .logo { font-size: 1.1rem; } }
+
+  /* === ハンバーガーメニュー（タブレット・スマホ用） === */
+  .nav-toggle { display: none; width: 30px; height: 22px; position: relative; background: none; border: none; padding: 0; cursor: none; z-index: 110; flex-shrink: 0; }
+  .nav-toggle span { position: absolute; left: 0; width: 100%; height: 3px; background: var(--text-main); border-radius: 3px; transition: transform 0.35s cubic-bezier(0.25,1,0.5,1), opacity 0.2s ease, top 0.35s ease, bottom 0.35s ease; }
+  .nav-toggle span:nth-child(1) { top: 0; }
+  .nav-toggle span:nth-child(2) { top: 50%; margin-top: -1.5px; }
+  .nav-toggle span:nth-child(3) { bottom: 0; }
+  nav.menu-open .nav-toggle span:nth-child(1) { top: 50%; margin-top: -1.5px; transform: rotate(45deg); }
+  nav.menu-open .nav-toggle span:nth-child(2) { opacity: 0; }
+  nav.menu-open .nav-toggle span:nth-child(3) { bottom: 50%; margin-bottom: -1.5px; transform: rotate(-45deg); }
+
+  @media (max-width: 1024px) {
+    .nav-toggle { display: block; }
+    .nav-links {
+      position: absolute; top: calc(100% + 12px); left: 0; width: 100%;
+      flex-direction: column; align-items: center; gap: 2px;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(30px);
+      border: 1px solid rgba(255,255,255,0.6); border-radius: 24px;
+      padding: 0 24px; max-height: 0; overflow: hidden; opacity: 0;
+      pointer-events: none; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      transition: max-height 0.45s cubic-bezier(0.25,1,0.5,1), opacity 0.3s ease, padding 0.45s ease;
+    }
+    nav.menu-open .nav-links { max-height: 460px; opacity: 1; pointer-events: auto; padding: 14px 24px; }
+    .nav-link { font-size: 1rem; letter-spacing: 0.08em; padding: 12px 0; width: 100%; text-align: center; }
+    nav.menu-open .nav-links .nav-link { color: var(--text-main) !important; }
+  }
 
   /* =========================================
      5. Main Visual & Text Animation
@@ -775,6 +801,9 @@
       <a href="#aicreative" class="nav-link interactive">AI</a>
       <a href="#contact" class="nav-link interactive">Contact</a>
     </div>
+    <button class="nav-toggle interactive" id="navToggle" aria-label="メニュー" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <section id="home">
@@ -1656,6 +1685,22 @@
       window.addEventListener('scroll', updateNavColor, { passive: true });
       window.addEventListener('resize', updateNavColor);
       updateNavColor();
+    }
+
+    // ハンバーガーメニューの開閉（タブレット・スマホ）
+    const navToggle = document.getElementById('navToggle');
+    if (navToggle && navBar) {
+      navToggle.addEventListener('click', () => {
+        const isOpen = navBar.classList.toggle('menu-open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+      // メニュー項目を押したら自動で閉じる
+      navBar.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navBar.classList.remove('menu-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
     }
 
     // 3D光の粒子（パーティクル）の描画ロジック
