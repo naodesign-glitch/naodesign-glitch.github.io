@@ -1751,25 +1751,37 @@
     const pContainer = document.getElementById('penguin-container'), pImg = document.getElementById('penguin-img'), bub = document.getElementById('bubble');
     const quotes = ["お腹すいたな〜。", "素敵なサイトでしょ？", "ずっと眠たいや〜。", "ゆっくり見てね！"];
     if (pContainer && pImg && bub) {
+      const pGuide = document.getElementById('penguin-guide');
+      let typingInterval = null, hideTimeout = null, jumpTimeout = null;
       pContainer.addEventListener('click', (e) => {
         e.stopPropagation();
-        const pGuide = document.getElementById('penguin-guide');
+        // 連打対応：前回の処理を全てリセット
+        clearInterval(typingInterval);
+        clearTimeout(hideTimeout);
+        clearTimeout(jumpTimeout);
+
+        // 一度クリックしたらガイドは隠したまま（再表示させない）
         if (pGuide) pGuide.style.opacity = '0';
-        pImg.classList.add('action'); 
-        setTimeout(() => pImg.classList.remove('action'), 2500); 
-        bub.classList.add('show', 'typing'); bub.innerHTML = '';
+
+        // ジャンプを毎回頭から再生（クラス除去→強制リフロー→再付与）
+        pImg.classList.remove('action');
+        void pImg.offsetWidth;
+        pImg.classList.add('action');
+        jumpTimeout = setTimeout(() => pImg.classList.remove('action'), 2500);
+
+        // 吹き出しを毎回最初から表示
+        bub.classList.add('show', 'typing');
+        bub.innerHTML = '';
         const text = quotes[Math.floor(Math.random() * quotes.length)];
         let i = 0;
-        const interval = setInterval(() => {
+        typingInterval = setInterval(() => {
           bub.innerHTML = text.slice(0, i + 1); i++;
           if (i >= text.length) {
-            clearInterval(interval);
-            setTimeout(() => { 
-              bub.classList.remove('show'); 
-              if (pGuide) pGuide.style.opacity = '1'; 
-            }, 2000);
+            clearInterval(typingInterval);
+            bub.classList.remove('typing');
+            hideTimeout = setTimeout(() => bub.classList.remove('show'), 2000);
           }
-        }, 100); 
+        }, 100);
       });
     }
 
