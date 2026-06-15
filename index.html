@@ -254,7 +254,7 @@
      6. Right Bottom Penguin & Guide Text
   ========================================= */
   /* キャラの円の右下・外側にはみ出して添える */
-  .penguin-wrapper { position: absolute; bottom: -14%; right: -14%; width: 38%; z-index: 5; cursor: none; }
+  .penguin-wrapper { position: absolute; bottom: -18%; right: -16%; width: 37%; z-index: 5; cursor: none; }
   @media (max-width: 768px) { .penguin-wrapper { bottom: -12%; right: -12%; width: 40%; } }
   /* .penguin-img は新ヒーローのCSSで再定義（旧・右下ペンギン用は廃止） */
   .penguin-img.action { animation: penguinAction 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -278,6 +278,13 @@
   }
   .speech-bubble::after { content: '|'; animation: blink 1s infinite; margin-left: 2px; opacity: 0; font-weight: normal; }
   .speech-bubble.typing::after { opacity: 1; }
+
+  /* ヒーロー内：ガイド/吹き出しはペンギンの「下」に出してアイコン円と被らせない（しっぽも上向き） */
+  .hero-visual .penguin-guide { top: calc(100% + 12px); bottom: auto; }
+  .hero-visual .penguin-guide::after { top: -6px; bottom: auto; border-width: 0 6px 6px 6px; border-color: transparent transparent var(--text-main) transparent; }
+  .hero-visual .speech-bubble { top: calc(100% + 12px); bottom: auto; transform: translateX(-50%) translateY(-10px); }
+  .hero-visual .speech-bubble.show { transform: translateX(-50%) translateY(0); }
+  .hero-visual .speech-bubble::before { top: -8px; bottom: auto; border-width: 0 8px 8px 8px; border-color: transparent transparent rgba(255, 255, 255, 0.98) transparent; }
 
   /* =========================================
      7. 全画面キラキラスタンプ
