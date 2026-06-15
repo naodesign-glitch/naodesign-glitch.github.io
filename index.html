@@ -154,35 +154,34 @@
     opacity: 0;
     animation: fadeUp 0.6s ease forwards 0.8s;
   }
-  .btn-primary {
-    padding: 0.75rem 2rem;
+  .btn-primary, .btn-secondary {
+    padding: 0.8rem 2.2rem;
     border-radius: 999px;
-    background: var(--accent-pink);
-    color: var(--text-main);
     font-size: 14px;
     font-weight: 800;
     text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary {
+    background: #ff9eb5;
+    color: #fff;
+    border-color: #ff9eb5;
   }
   .btn-primary:hover {
     transform: translateY(-3px);
-    background: #ff9eb5;
+    background: #ff7a9c;
+    border-color: #ff7a9c;
     box-shadow: 0 8px 18px rgba(255, 158, 181, 0.45);
   }
   .btn-secondary {
-    padding: 0.75rem 2rem;
-    border-radius: 999px;
-    border: 1px solid var(--text-muted);
-    color: var(--text-muted);
-    font-size: 14px;
-    text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    background: transparent;
+    color: #ff9eb5;
+    border-color: #ff9eb5;
   }
   .btn-secondary:hover {
     transform: translateY(-3px);
-    background: rgba(250, 212, 212, 0.35);
-    border-color: var(--text-main);
-    color: var(--text-main);
+    background: rgba(255, 158, 181, 0.12);
   }
   .hero-visual {
     flex-shrink: 0;
@@ -222,14 +221,12 @@
     background-color: #fff;
   }
   .penguin-img {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    width: 34%;
+    width: 100%;
     height: auto;
+    display: block;
     filter: drop-shadow(0 10px 18px rgba(0,0,0,0.15));
     animation: floatIcon 3.5s ease-in-out infinite;
-    z-index: 3;
+    transform-origin: bottom center;
   }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -256,8 +253,8 @@
   /* =========================================
      6. Right Bottom Penguin & Guide Text
   ========================================= */
-  .penguin-wrapper { position: absolute; bottom: 5%; right: 5%; width: clamp(120px, 20vw, 180px); z-index: 20; }
-  @media (max-width: 768px) { .penguin-wrapper { right: 5%; bottom: -20px; } }
+  .penguin-wrapper { position: absolute; bottom: -8px; right: -12px; width: 42%; z-index: 4; cursor: none; }
+  @media (max-width: 768px) { .penguin-wrapper { right: -6px; bottom: -6px; } }
   /* .penguin-img は新ヒーローのCSSで再定義（旧・右下ペンギン用は廃止） */
   .penguin-img.action { animation: penguinAction 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
   @keyframes penguinAction { 0%, 100% { transform: scale(1, 1) translateY(0); } 10% { transform: scale(1.2, 0.8) translateY(10px); } 20% { transform: scale(0.9, 1.1) translateY(-25px); } 30%, 50% { transform: scale(1, 1) translateY(-25px) rotate(10deg); } 40% { transform: scale(1, 1) translateY(-25px) rotate(-10deg); } 60% { transform: scale(1, 1) translateY(0) rotate(0); } 70% { transform: scale(1.1, 0.9) translateY(5px); } }
@@ -933,13 +930,9 @@
   <nav>
     <a href="#home" class="logo interactive eng-font">Portfolio</a>
     <div class="nav-links eng-font">
-      <a href="#about" class="nav-link interactive">About</a>
-      <a href="#web" class="nav-link interactive">Web</a>
-      <a href="#app" class="nav-link interactive">App Design</a>
-      <a href="#motion" class="nav-link interactive">Motion</a>
-      <a href="#ui" class="nav-link interactive">UI</a>
-      <a href="#aicreative" class="nav-link interactive">AI</a>
-      <a href="#contact" class="nav-link interactive">Contact</a>
+      <a href="#web" class="nav-link interactive">WORKS</a>
+      <a href="#about" class="nav-link interactive">ABOUT</a>
+      <a href="#contact" class="nav-link interactive">CONTACT</a>
     </div>
     <button class="nav-toggle interactive" id="navToggle" aria-label="メニュー" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -962,7 +955,14 @@
           <div class="icon-aura"></div>
           <img src="./image/ikon.png" alt="メインキャラクター" class="main-character-img" onerror="this.src='https://placehold.co/300x300?text=nao'">
         </div>
-        <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img" onerror="this.src='https://placehold.co/120x120?text=peng'">
+        <div class="penguin-wrapper interactive" id="penguin-container">
+          <div class="penguin-guide" id="penguin-guide">
+            <span class="pc-text">僕をクリックしてみてね</span>
+            <span class="sp-text">僕をタップしてみてね</span>
+          </div>
+          <div class="speech-bubble" id="bubble"></div>
+          <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img" onerror="this.src='https://placehold.co/120x120?text=peng'">
+        </div>
       </div>
     </div>
   </section>
