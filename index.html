@@ -129,7 +129,7 @@
     font-size: clamp(11px, 1.2vw, 13px);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-sub, #888);
+    color: var(--text-muted);
     margin: 0 0 1rem;
     opacity: 0;
     animation: fadeUp 0.6s ease forwards 0.2s;
@@ -145,7 +145,7 @@
   .hero-desc {
     font-size: clamp(14px, 1.5vw, 16px);
     line-height: 1.9;
-    color: var(--text-sub, #888);
+    color: var(--text-muted);
     margin: 0 0 2rem;
     opacity: 0;
     animation: fadeUp 0.6s ease forwards 0.6s;
@@ -160,9 +160,10 @@
   .btn-primary {
     padding: 0.75rem 2rem;
     border-radius: 999px;
-    background: var(--accent, #a78bfa);
-    color: #fff;
+    background: var(--accent-pink);
+    color: var(--text-main);
     font-size: 14px;
+    font-weight: 800;
     text-decoration: none;
     transition: opacity 0.2s;
   }
@@ -170,8 +171,8 @@
   .btn-secondary {
     padding: 0.75rem 2rem;
     border-radius: 999px;
-    border: 1px solid var(--text-sub, #888);
-    color: var(--text-sub, #888);
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
     font-size: 14px;
     text-decoration: none;
     transition: opacity 0.2s;
@@ -179,12 +180,50 @@
   .btn-secondary:hover { opacity: 0.65; }
   .hero-visual {
     flex-shrink: 0;
-    width: clamp(200px, 28vw, 320px);
+    position: relative;
+    z-index: 1;
+    width: clamp(220px, 30vw, 340px);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .main-icon-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon-aura {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue), #eadbc8);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    animation: auraMorph 8s ease-in-out infinite;
+    z-index: -1;
+    filter: blur(25px);
+    opacity: 0.85;
+  }
+  .main-character-img {
+    width: 88%;
+    height: 88%;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    background-color: #fff;
   }
   .penguin-img {
-    width: 100%;
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 34%;
     height: auto;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.15));
     animation: floatIcon 3.5s ease-in-out infinite;
+    z-index: 3;
   }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -913,8 +952,11 @@
         </div>
       </div>
       <div class="hero-visual">
-        <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img"
-          onerror="this.src='https://placehold.co/280x280?text=nao'">
+        <div class="main-icon-wrapper">
+          <div class="icon-aura"></div>
+          <img src="./image/ikon.png" alt="メインキャラクター" class="main-character-img" onerror="this.src='https://placehold.co/300x300?text=nao'">
+        </div>
+        <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img" onerror="this.src='https://placehold.co/120x120?text=peng'">
       </div>
     </div>
   </section>
