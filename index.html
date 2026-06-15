@@ -109,10 +109,100 @@
   /* =========================================
      5. Main Visual & Text Animation
   ========================================= */
-  .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; margin: 0 auto 40px; width: fit-content; z-index: 10; }
-  .main-icon-wrapper { position: relative; width: clamp(240px, 40vw, 340px); height: clamp(240px, 40vw, 340px); display: flex; justify-content: center; align-items: center; }
-  .icon-aura { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, #ff9eb5, #92dce5, #eadbc8); background-size: 200% 200%; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: auraMorph 8s ease-in-out infinite, auraGradient 5s ease infinite; z-index: -1; filter: blur(25px); opacity: 0.8; }
-  .main-character-img { width: 90%; height: 90%; object-fit: cover; border-radius: 50%; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background-color: #fff; }
+  .hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(1.5rem, 5vw, 6rem);
+  }
+  .hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-role {
+    font-size: clamp(11px, 1.2vw, 13px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-sub, #888);
+    margin: 0 0 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.4s;
+  }
+  .hero-desc {
+    font-size: clamp(14px, 1.5vw, 16px);
+    line-height: 1.9;
+    color: var(--text-sub, #888);
+    margin: 0 0 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+  .btn-primary {
+    padding: 0.75rem 2rem;
+    border-radius: 999px;
+    background: var(--accent, #a78bfa);
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    padding: 0.75rem 2rem;
+    border-radius: 999px;
+    border: 1px solid var(--text-sub, #888);
+    color: var(--text-sub, #888);
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-secondary:hover { opacity: 0.65; }
+  .hero-visual {
+    flex-shrink: 0;
+    width: clamp(200px, 28vw, 320px);
+  }
+  .penguin-img {
+    width: 100%;
+    height: auto;
+    animation: floatIcon 3.5s ease-in-out infinite;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+  }
+  @media (max-width: 768px) {
+    .hero-inner {
+      flex-direction: column-reverse;
+      text-align: center;
+      padding-top: 6rem;
+    }
+    .hero-cta { justify-content: center; }
+    .hero-visual { width: clamp(140px, 50vw, 200px); }
+  }
   .char-bounce { display: inline-block; opacity: 0; transform: translateY(30px) scale(0.8); }
   body.loaded .hero-title .char-bounce, body.loaded .hero-desc .char-bounce { animation: popBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
   .is-animated .char-bounce { animation: popBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
@@ -123,7 +213,7 @@
   ========================================= */
   .penguin-wrapper { position: absolute; bottom: 5%; right: 5%; width: clamp(120px, 20vw, 180px); z-index: 20; }
   @media (max-width: 768px) { .penguin-wrapper { right: 5%; bottom: -20px; } }
-  .penguin-img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15)); transform-origin: bottom center; animation: floatIcon 4s ease-in-out infinite; }
+  /* .penguin-img は新ヒーローのCSSで再定義（旧・右下ペンギン用は廃止） */
   .penguin-img.action { animation: penguinAction 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
   @keyframes penguinAction { 0%, 100% { transform: scale(1, 1) translateY(0); } 10% { transform: scale(1.2, 0.8) translateY(10px); } 20% { transform: scale(0.9, 1.1) translateY(-25px); } 30%, 50% { transform: scale(1, 1) translateY(-25px) rotate(10deg); } 40% { transform: scale(1, 1) translateY(-25px) rotate(-10deg); } 60% { transform: scale(1, 1) translateY(0) rotate(0); } 70% { transform: scale(1.1, 0.9) translateY(5px); } }
   .penguin-guide { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: var(--text-main); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: #fff; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.15); pointer-events: none; animation: guideBounce 2s infinite ease-in-out; transition: opacity 0.3s ease; z-index: 10; }
@@ -151,7 +241,7 @@
   ========================================= */
   .site-stamp { position: fixed; width: 80px; pointer-events: none; z-index: 99999; transform-origin: center; animation: stampBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
   @keyframes stampBounce { 0% { transform: translate(-50%, -50%) scale(0) rotate(var(--rot)); opacity: 0; } 30% { transform: translate(-50%, -50%) scale(1.15) rotate(var(--rot)); opacity: 1; } 60% { transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.5) rotate(var(--rot)); opacity: 0; } }
-  @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  /* floatIcon は新ヒーローのCSSで再定義 */
   @keyframes auraMorph { 0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg); } 50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(180deg) scale(1.05); } 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(360deg); } }
 
   /* =========================================
@@ -811,29 +901,21 @@
     </button>
   </nav>
 
-  <section id="home">
-    <div class="container">
-      <div class="hero-visual">
-        <div class="main-icon-wrapper interactive">
-          <div class="icon-aura"></div>
-          <img src="./image/ikon.png" alt="メインキャラクター" class="main-character-img" onerror="this.src='https://via.placeholder.com/300?text=Icon'">
+  <section id="home" class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-role">Web Designer / UI · Frontend</p>
+        <h1 class="hero-title">デザインで、<br>伝わる体験をつくる。</h1>
+        <p class="hero-desc">企画・設計・実装まで一貫して担う、<br>AIネイティブなWebデザイナー。</p>
+        <div class="hero-cta">
+          <a href="#web" class="btn-primary">Works を見る</a>
+          <a href="#about" class="btn-secondary">About</a>
         </div>
       </div>
-      <h1 id="hero-title" class="hero-title interactive eng-font" style="font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 0.1em; margin-bottom: 20px;">
-        CREATIVE<br>DESIGN WORKS
-      </h1>
-      <p id="hero-desc" class="hero-desc" style="color: var(--text-muted); font-size: 1.1rem; font-weight: 700; max-width: 600px; margin: 0 auto;">
-        情報と感性を繋ぐ、洗練されたクリエイティブ。<br>企画の立ち上げから実装までを一貫して手がけます。
-      </p>
-    </div>
-
-    <div class="penguin-wrapper interactive" id="penguin-container">
-      <div class="penguin-guide" id="penguin-guide">
-        <span class="pc-text">僕をクリックしてみてね</span>
-        <span class="sp-text">僕をタップしてみてね</span>
+      <div class="hero-visual">
+        <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img"
+          onerror="this.src='https://placehold.co/280x280?text=nao'">
       </div>
-      <div class="speech-bubble" id="bubble"></div>
-      <img src="./image/pengin.png" alt="ペンギン" class="penguin-img" id="penguin-img" onerror="this.src='https://via.placeholder.com/150?text=Penguin'">
     </div>
   </section>
 
@@ -1547,8 +1629,7 @@
         });
       });
     }
-    wrapCharacters('hero-title', 0.5);
-    wrapCharacters('hero-desc', 1.3);
+    // ヒーローの文字分割アニメは新デザイン（fadeUp）に置き換えたため廃止
 
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
