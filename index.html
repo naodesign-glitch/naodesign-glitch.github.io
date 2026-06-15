@@ -139,21 +139,18 @@
     font-weight: 700;
     line-height: 1.3;
     margin: 0 0 1.2rem;
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards 0.4s;
   }
   .hero-desc {
     font-size: clamp(14px, 1.5vw, 16px);
     line-height: 1.9;
     color: var(--text-muted);
     margin: 0 0 2rem;
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards 0.6s;
   }
   .hero-cta {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
     opacity: 0;
     animation: fadeUp 0.6s ease forwards 0.8s;
   }
@@ -165,9 +162,13 @@
     font-size: 14px;
     font-weight: 800;
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   }
-  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    background: #ff9eb5;
+    box-shadow: 0 8px 18px rgba(255, 158, 181, 0.45);
+  }
   .btn-secondary {
     padding: 0.75rem 2rem;
     border-radius: 999px;
@@ -175,9 +176,14 @@
     color: var(--text-muted);
     font-size: 14px;
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
-  .btn-secondary:hover { opacity: 0.65; }
+  .btn-secondary:hover {
+    transform: translateY(-3px);
+    background: rgba(250, 212, 212, 0.35);
+    border-color: var(--text-main);
+    color: var(--text-main);
+  }
   .hero-visual {
     flex-shrink: 0;
     position: relative;
@@ -944,8 +950,8 @@
     <div class="hero-inner">
       <div class="hero-text">
         <p class="hero-role">Web Designer / UI · Frontend</p>
-        <h1 class="hero-title">デザインで、<br>伝わる体験をつくる。</h1>
-        <p class="hero-desc">企画・設計・実装まで一貫して担う、<br>AIネイティブなWebデザイナー。</p>
+        <h1 id="hero-title" class="hero-title">デザインで、<br>伝わる体験をつくる。</h1>
+        <p id="hero-desc" class="hero-desc">企画・設計・実装まで一貫して担う、<br>AIネイティブなWebデザイナー。</p>
         <div class="hero-cta">
           <a href="#web" class="btn-primary">Works を見る</a>
           <a href="#about" class="btn-secondary">About</a>
@@ -1671,7 +1677,8 @@
         });
       });
     }
-    // ヒーローの文字分割アニメは新デザイン（fadeUp）に置き換えたため廃止
+    wrapCharacters('hero-title', 0.5);
+    wrapCharacters('hero-desc', 1.3);
 
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
