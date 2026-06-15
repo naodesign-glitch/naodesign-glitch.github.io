@@ -253,8 +253,9 @@
   /* =========================================
      6. Right Bottom Penguin & Guide Text
   ========================================= */
-  .penguin-wrapper { position: absolute; bottom: -8px; right: -12px; width: 42%; z-index: 4; cursor: none; }
-  @media (max-width: 768px) { .penguin-wrapper { right: -6px; bottom: -6px; } }
+  /* キャラの円の右下・外側にはみ出して添える */
+  .penguin-wrapper { position: absolute; bottom: -14%; right: -14%; width: 38%; z-index: 5; cursor: none; }
+  @media (max-width: 768px) { .penguin-wrapper { bottom: -12%; right: -12%; width: 40%; } }
   /* .penguin-img は新ヒーローのCSSで再定義（旧・右下ペンギン用は廃止） */
   .penguin-img.action { animation: penguinAction 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
   @keyframes penguinAction { 0%, 100% { transform: scale(1, 1) translateY(0); } 10% { transform: scale(1.2, 0.8) translateY(10px); } 20% { transform: scale(0.9, 1.1) translateY(-25px); } 30%, 50% { transform: scale(1, 1) translateY(-25px) rotate(10deg); } 40% { transform: scale(1, 1) translateY(-25px) rotate(-10deg); } 60% { transform: scale(1, 1) translateY(0) rotate(0); } 70% { transform: scale(1.1, 0.9) translateY(5px); } }
